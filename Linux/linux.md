@@ -30,7 +30,7 @@ File system
 
     **Think of it like this:** Storage is the warehouse where you keep your belongings, a database is a library where those belongings are organized and cataloged, and data is the actual information contained in the belongings.
 ![alt text](images/linux1.png)
-## Shell
+# Shell
 **The `cp` command is a built-in shell command that is executed by the shell interpreter (e.g., Bash). The shell is responsible for understanding and carrying out the `cp` command.**
 
 Here's how the system knows to copy the file:
