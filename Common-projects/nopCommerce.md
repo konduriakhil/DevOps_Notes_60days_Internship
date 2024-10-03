@@ -6,13 +6,38 @@
   1. dotnet-sdk-8
   2. Nop.Web.csproj(requirements and configaration file)
   3. t2.medium instance
+  4. docker
+## Docker Installation
+```sh
+# Docker Installation
+curl -fsSL https://get.docker.com -o install-docker.sh
+sh install-docker.sh
+docker info
+# Adding user to docker group
+sudo usermod -aG docker ubuntu
+exit
+docker info
+# Deleting the all containers
+docker rm -f $(docker container ls -a -q)
+# Deleting the all images
+docker rmi $(docker image ls -q)
+# Creating docker image
+docker image build -t sp:1 .
+# Creating containers
+docker container run -d -P --name akhil sp:1
+```
 # Manually
+## Requirements
+  1. Docker
+  2. dotnet-sdk-8
+  3. Nop.Web.csproj(requirements and configaration file)
+  4. t2.medium instance
 * First install dotnet sdk in your local system
 * ![alt text](images/nop1.png)
 * ![alt text](images/nop2.png)
 * ![alt text](images/nop3.png)
 * Create a virtal machine `t2.medium` and install .net/sdk8
-* * clone the git repository
+* Clone the git repository
 ```sh
 # Install dotnet-sdk-8.0 in your machine and create published folder
 sudo apt-get update && \
@@ -40,24 +65,7 @@ dotnet Nop.Web.dll --urls http://0.0.0.0:5000
 # Dockerfile
 ## Requirements
   1. docker
-```sh
-# Docker Installation
-curl -fsSL https://get.docker.com -o install-docker.sh
-sh install-docker.sh
-docker info
-# Adding user to docker group
-sudo usermod -aG docker ubuntu
-exit
-docker info
-# Deleting the all containers
-docker rm -f $(docker container ls -a -q)
-# Deleting the all images
-docker rmi $(docker image ls -q)
-# Creating docker image
-docker image build -t sp:1 .
-# Creating containers
-docker container run -d -P --name akhil sp:1
-```
+  2. dotnet/sdk base image
 ```Dockerfile
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 LABEL evaluator="akhil"
