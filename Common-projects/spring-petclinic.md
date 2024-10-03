@@ -7,6 +7,7 @@
     2. maven
     3. pom.xml 
     4. Docker
+    5. Trivy
 ## Docker Installation
 ```sh
 # Docker Installation
@@ -52,6 +53,8 @@ java -jar target/*.jar
 ## Requirements
   1. Docker
   2. maven and java base image
+  3. Trivy
+### Dockerfile
 ```Dockerfile
 FROM maven:3.9.7-eclipse-temurin-17 AS build
 LABEL presentor='akhil'
@@ -68,4 +71,14 @@ USER ${USERNAME}
 RUN adduser -h ${HOMEDIR} -s /bin/sh -D ${USERNAME}
 COPY --from=build --chown=${USERNAME}:${USERNAME} /akhil/target/spring-*.jar /akhil/spc.jar
 CMD [ "java", "-jar", "spc.jar" ]
+```
+### Trivy
+* Install trivy on your machine to scan the docker image and to find vulnerabilities
+```sh
+# Installing trivy
+sudo apt-get install -y wget
+wget https://github.com/aquasecurity/trivy/releases/download/v0.34.0/trivy_0.34.0_Linux-64bit.deb
+sudo dpkg -i trivy_0.34.0_Linux-64bit.deb
+# Scanning the docker image
+trivy image spc:1
 ```

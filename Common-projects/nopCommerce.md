@@ -7,6 +7,7 @@
   2. Nop.Web.csproj(requirements and configaration file)
   3. t2.medium instance
   4. docker
+  5. pom.xml
 ## Docker Installation
 ```sh
 # Docker Installation
@@ -66,6 +67,7 @@ dotnet Nop.Web.dll --urls http://0.0.0.0:5000
 ## Requirements
   1. docker
   2. dotnet/sdk base image
+### Dockerfile
 ```Dockerfile
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 LABEL evaluator="akhil"
@@ -79,7 +81,11 @@ RUN mkdir /published && \
 FROM mcr.microsoft.com/dotnet/sdk:8.0
 LABEL authour="akhil"
 ARG HOMEDIR="/com"
+# ARG USERNAME="com"
+# USER ${USERNAME}
 WORKDIR ${HOMEDIR}
+# RUN adduser -h ${HOMEDIR} -s /bin/sh -D ${USERNAME}
+# COPY --from=build --chown=${USERNAME}:${USERNAME} /published/ ${HOMEDIR}/
 COPY --from=build /published/ ${HOMEDIR}/
 EXPOSE 5000
 CMD ["dotnet", "Nop.Web.dll", "--urls", "http://0.0.0.0:5000"]
@@ -87,3 +93,13 @@ CMD ["dotnet", "Nop.Web.dll", "--urls", "http://0.0.0.0:5000"]
 ![alt text](images/nop11.png)
 ![alt text](images/nop12.png)
 ![alt text](images/nop13.png)
+### Trivy
+* Install trivy on your machine to scan the docker image and to find vulnerabilities
+```sh
+# Installing trivy
+sudo apt-get install -y wget
+wget https://github.com/aquasecurity/trivy/releases/download/v0.34.0/trivy_0.34.0_Linux-64bit.deb
+sudo dpkg -i trivy_0.34.0_Linux-64bit.deb
+# Scanning the docker image
+trivy image spc:1
+```
