@@ -3,30 +3,13 @@
   1. Manually
   2. Containerization 
 ## requirements
-    1. java17
-    2. maven
-    3. pom.xml 
-    4. Docker
-    5. Trivy
-## Docker Installation
-```sh
-# Docker Installation
-curl -fsSL https://get.docker.com -o install-docker.sh
-sh install-docker.sh
-docker info
-# Adding user to docker group
-sudo usermod -aG docker ubuntu
-exit
-docker info
-# Deleting the all containers
-docker rm -f $(docker container ls -a -q)
-# Deleting the all images
-docker rmi $(docker image ls -q)
-# Creating docker image
-docker image build -t sp:1 .
-# Creating containers
-docker container run -d -P --name akhil sp:1
-```
+   1. java17
+   2. Docker
+   3. Trivy
+   4. maven
+      1. pom.xml(Dependencies and configaration file)
+
+
 # Manual
 ## Requirements
   1. java17
@@ -54,6 +37,25 @@ java -jar target/*.jar
   1. Docker
   2. maven and java base image
   3. Trivy
+## Docker Installation
+```sh
+# Docker Installation
+curl -fsSL https://get.docker.com -o install-docker.sh
+sh install-docker.sh
+docker info
+# Adding user to docker group
+sudo usermod -aG docker ubuntu
+exit
+docker info
+# Deleting the all containers
+docker rm -f $(docker container ls -a -q)
+# Deleting the all images
+docker rmi $(docker image ls -q)
+# Creating docker image
+docker image build -t sp:1 .
+# Creating containers
+docker container run -d -P --name akhil sp:1
+```
 ### Dockerfile
 ```Dockerfile
 FROM maven:3.9.7-eclipse-temurin-17 AS build

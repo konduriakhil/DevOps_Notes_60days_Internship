@@ -4,35 +4,15 @@
   2. Docker
 ## Requirements
   1. dotnet-sdk-8
-  2. Nop.Web.csproj(requirements and configaration file)
-  3. t2.medium instance
-  4. docker
-  5. pom.xml
-## Docker Installation
-```sh
-# Docker Installation
-curl -fsSL https://get.docker.com -o install-docker.sh
-sh install-docker.sh
-docker info
-# Adding user to docker group
-sudo usermod -aG docker ubuntu
-exit
-docker info
-# Deleting the all containers
-docker rm -f $(docker container ls -a -q)
-# Deleting the all images
-docker rmi $(docker image ls -q)
-# Creating docker image
-docker image build -t sp:1 .
-# Creating containers
-docker container run -d -P --name akhil sp:1
-```
+     1. Nop.Web.csproj(Dependencies and configaration file)
+  2. t2.medium instance
+  3. docker
+
 # Manually
 ## Requirements
-  1. Docker
-  2. dotnet-sdk-8
-  3. Nop.Web.csproj(requirements and configaration file)
-  4. t2.medium instance
+  1. dotnet-sdk-8
+  2. Nop.Web.csproj(requirements and configaration file)
+  3. t2.medium instance
 * First install dotnet sdk in your local system
 * ![alt text](images/nop1.png)
 * ![alt text](images/nop2.png)
@@ -67,9 +47,29 @@ dotnet Nop.Web.dll --urls http://0.0.0.0:5000
 ## Requirements
   1. docker
   2. dotnet/sdk base image
+
+## Docker Installation
+```sh
+# Docker Installation
+curl -fsSL https://get.docker.com -o install-docker.sh
+sh install-docker.sh
+docker info
+# Adding user to docker group
+sudo usermod -aG docker ubuntu
+exit
+docker info
+# Deleting the all containers
+docker rm -f $(docker container ls -a -q)
+# Deleting the all images
+docker rmi $(docker image ls -q)
+# Creating docker image
+docker image build -t sp:1 .
+# Creating containers
+docker container run -d -P --name akhil sp:1
+```
 ### Dockerfile
 ```Dockerfile
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS build
 LABEL evaluator="akhil"
 WORKDIR /nop
 COPY . /nop/
@@ -81,12 +81,12 @@ RUN mkdir /published && \
 FROM mcr.microsoft.com/dotnet/sdk:8.0
 LABEL authour="akhil"
 ARG HOMEDIR="/com"
-# ARG USERNAME="com"
-# USER ${USERNAME}
+ARG USERNAME="com"
 WORKDIR ${HOMEDIR}
-# RUN adduser -h ${HOMEDIR} -s /bin/sh -D ${USERNAME}
-# COPY --from=build --chown=${USERNAME}:${USERNAME} /published/ ${HOMEDIR}/
-COPY --from=build /published/ ${HOMEDIR}/
+RUN adduser -h ${HOMEDIR} -s /bin/sh -D ${USERNAME}
+COPY --from=build --chown=${USERNAME}:${USERNAME} /published/ ${HOMEDIR}/
+USER ${USERNAME}
+# COPY --from=build /published/ ${HOMEDIR}/
 EXPOSE 5000
 CMD ["dotnet", "Nop.Web.dll", "--urls", "http://0.0.0.0:5000"]
 ```
