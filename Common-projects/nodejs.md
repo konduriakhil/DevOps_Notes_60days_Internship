@@ -117,8 +117,10 @@ trivy image spc:1
      1. npm comes with node installation
 
 ```sh
-sudo apt update
+# Clone the git repository
+https://github.com/konduriakhil/LibraryManagementSystem.git
 # Install node version manager(nvm)
+sudo apt update
 sudo apt install curl
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash 
 source ~/.bashrc

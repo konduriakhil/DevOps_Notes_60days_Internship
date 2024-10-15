@@ -25,7 +25,7 @@ sudo apt-get update && \
   sudo apt-get install -y dotnet-sdk-8.0
 mkdir published
 # Clone repository, move to the folder and build the application with the help of `Nop.Web.csproj` file
-git clone https://github.com/Gopi0527/nopproject.git
+git clone https://github.com/konduriakhil/nopCommerce.git
 cd nopproject
 dotnet publish -c Release src/Presentation/Nop.Web/Nop.Web.csproj -o /home/ubuntu/published
 # Go to homedirectory, go to published folder and make bin and logs folders
@@ -69,24 +69,24 @@ docker container run -d -P --name akhil sp:1
 ```
 ### Dockerfile
 ```Dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 LABEL evaluator="akhil"
+USER nop
 WORKDIR /nop
-COPY . /nop/
+COPY . .
 RUN mkdir /published && \
     dotnet publish -c Release src/Presentation/Nop.Web/Nop.Web.csproj -o /published && \
     cd /published && \
     mkdir bin logs;
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 LABEL authour="akhil"
 ARG HOMEDIR="/com"
 ARG USERNAME="com"
-WORKDIR ${HOMEDIR}
 RUN adduser -h ${HOMEDIR} -s /bin/sh -D ${USERNAME}
-COPY --from=build --chown=${USERNAME}:${USERNAME} /published/ ${HOMEDIR}/
 USER ${USERNAME}
-# COPY --from=build /published/ ${HOMEDIR}/
+WORKDIR ${HOMEDIR}
+COPY --from=build --chown=${USERNAME}:${USERNAME} /published/ .
 EXPOSE 5000
 CMD ["dotnet", "Nop.Web.dll", "--urls", "http://0.0.0.0:5000"]
 ```

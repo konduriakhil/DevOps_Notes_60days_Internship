@@ -87,3 +87,4 @@ docker container run -d -P --name akhil sp:1
 * **If you want to isolate data from the host file system for security or performance reasons,** use a tmpfs mount.
 
 By understanding the differences between bind mounts and tmpfs mounts, you can select the appropriate mount type for your specific use case and optimize your Docker container's performance and data management.
+
