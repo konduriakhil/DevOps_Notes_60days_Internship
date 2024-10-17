@@ -44,7 +44,7 @@ curl -fsSL https://get.docker.com -o install-docker.sh
 sh install-docker.sh
 docker info
 # Adding user to docker group
-sudo usermod -aG docker ubuntu
+sudo usermod -aG docker azureuser
 exit
 docker info
 # Deleting the all containers

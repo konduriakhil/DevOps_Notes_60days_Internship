@@ -19,8 +19,22 @@ docker image push <azure container registry url>/nginx:1
 * ![alt text](images/docker13.png)
 * ![alt text](images/docker14.png)
 ## Azure Pipeline
-### Azure Container Registry
+* Create Azure Container Registry from console login 
 * 
+### Azure Container Registry
+* Create Azure Container Registry
+* ![alt text](images/docker19.png)
+* ![alt text](images/docker20.png)
+* ![alt text](images/docker21.png)
+* Make service connecion in Azure DevOps project
+* ![alt text](images/docker22.png)
+* ![alt text](images/docker23.png)
+* ![alt text](images/docker24.png)
+* ![alt text](images/docker25.png)
+* ![alt text](images/docker26.png)
+* ![alt text](images/docker27.png)
+* ![alt text](images/docker29.png)
+* ![alt text](images/docker28.png)
 # Docker Hub
 * login to dockerhub
 ```sh

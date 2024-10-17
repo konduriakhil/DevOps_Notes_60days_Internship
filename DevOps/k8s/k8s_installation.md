@@ -1,4 +1,4 @@
-# Kubeadm
+# Kubeadm Setup
 [refer_here](https://directdevops.blog/2024/06/11/devops-classroom-notes-11-june-2024/) for kubeadm installation steps
 ```sh
 # Installing docker on all nodes
@@ -37,4 +37,40 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 ## Then you can join any number of worker nodes by running the following on each as root:
 kubeadm join 10.0.0.4:6443 --token l6r787.27rpwz58au2gsmdn
 ```
-# AKS
+# AKS Installation
+## CLI
+### Install Azure cli on your system through choco
+```sh
+# Installing azure-cli
+choco install azure-cli
+
+# Login to Azure account
+az login
+  EMAILID:
+  PASSWORD: 
+```
+### Creating AKS cluster
+```sh
+# Create new resource group
+az group create --name akscentralindia --location centralindia
+
+# This is one time setup, Register for Microsoft conatainer service
+az provider register --namespace Microsoft.ContainerService
+az provider show --namespace Microsoft.ContainerService
+
+# Creating AKS cluster
+az aks create --resource-group akscentralindia --name MyAKSCluster --node-count 1 --generate-ssh-keys --node-vm-size Standard_D2s_v3
+
+# Installing kubectl in local system and configuring with aks master 
+az aks install-cli
+az aks get-credentials --resource-group akscentralindia --name MyAKSCluster
+
+# Deleting AKS cluster
+az group delete --name $MY_RESOURCE_GROUP_NAME --yes --no-wait
+```
+
+## Terraform
+
+```aks.tf
+
+```
