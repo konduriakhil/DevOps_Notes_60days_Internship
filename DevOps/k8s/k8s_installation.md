@@ -36,10 +36,14 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
   https://kubernetes.io/docs/concepts/cluster-administration/addons/
 ## Then you can join any number of worker nodes by running the following on each as root:
 kubeadm join 10.0.0.4:6443 --token l6r787.27rpwz58au2gsmdn
+
+# Configuring CNI for network on master node
+kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+
 ```
 # AKS Installation
-## CLI
-### Install Azure cli on your system through choco
+## CLI 
+### Windows
 ```sh
 # Installing azure-cli
 choco install azure-cli
@@ -49,28 +53,83 @@ az login
   EMAILID:
   PASSWORD: 
 ```
-### Creating AKS cluster
+### Linux
+```sh
+# Update package lists and install prerequisites:
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release
+
+# Download the Microsoft signing key:
+mkdir -p /etc/apt/keyrings
+curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/microsoft.gpg > /dev/null
+
+# Add the Azure CLI repository:
+SUITE=$(lsb_release -cs)
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $SUITE main" | sudo tee /etc/apt/sources.list.d/microsoft.list
+
+# Install the Azure CLI:
+sudo apt-get update && sudo apt-get install -y azure-cli
+
+# Login to azure
+az login
+```
+![alt text](images/k8s1.png)
+![alt text](images/k8s2.png)
+#### Creating AKS cluster
 ```sh
 # Create new resource group
 az group create --name akscentralindia --location centralindia
+az group create --name kompose --location southindia
 
 # This is one time setup, Register for Microsoft conatainer service
 az provider register --namespace Microsoft.ContainerService
-az provider show --namespace Microsoft.ContainerService
 
 # Creating AKS cluster
 az aks create --resource-group akscentralindia --name MyAKSCluster --node-count 1 --generate-ssh-keys --node-vm-size Standard_D2s_v3
+az aks create --resource-group kompose --name kompose --node-count 1 --generate-ssh-keys --node-vm-size Standard_D2s_v3
 
 # Installing kubectl in local system and configuring with aks master 
 az aks install-cli
 az aks get-credentials --resource-group akscentralindia --name MyAKSCluster
 
 # Deleting AKS cluster
-az group delete --name $MY_RESOURCE_GROUP_NAME --yes --no-wait
+az aks delete --resource-group kompose --name kompose --no-wait --yes
 ```
 
 ## Terraform
 
-```aks.tf
+```sh
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "3.97.1"
+    }
+  }
+}
 
+provider "azurerm" {
+  features {}
+}
+resource "azurerm_resource_group" "aks" {
+  name     = "akhlirg"
+  location = "centralindia"
+}
+
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = "firstcluster"
+  location            = azurerm_resource_group.aks.location
+  resource_group_name = azurerm_resource_group.aks.name
+  dns_prefix          = "myaks"
+
+  default_node_pool {
+    name       = "default"
+    node_count = 1
+    vm_size    = "Standard_D2s_v3"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+}
 ```
