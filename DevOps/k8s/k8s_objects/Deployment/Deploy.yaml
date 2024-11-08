@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: books-service
+  annotations:
+    kubernetes.io/change-cause: "version v1.0"
+spec:
+  minReadySeconds: 5
+  replicas: 4
+  selector:
+    matchLabels:
+      app: books-service
+      version: v1.0
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: books-service
+        version: v1.0
+    spec:
+      containers:
+        - name: books-service
+          image: shaikkhajaibrahim/dmtest:1.0
+          env:
+            - name: DATABASE_URL
+              value: postgresql://user:password@books-db:5432/booksdb
+            - name: SECRET_KEY
+              value: YtDEVWnL35aAIP-5yxeLjAZ49R920-mMNDfwPyWULu63HFsYzo0f-LO2InxC8eu428k          
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 150Mi
+            limits:
+              cpu: 0.25
+              memory: 250Mi
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+spec:
+  type: NodePort
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 32549
+  selector:
+    app: books-service
+

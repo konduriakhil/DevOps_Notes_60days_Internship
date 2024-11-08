@@ -21,10 +21,10 @@ wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.14/cri-docke
 sudo dpkg -i cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb
 
 #  Execute the following on master node, Lets initialize the cluster using the following command as a root user
-kubeadm init --cri-socket unix:///var/run/cri-dockerd.sock
+kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket "unix:///var/run/cri-dockerd.sock"
 
 # When executed this command will give the output as shown below
-Your Kubernetes control-plane has initialized successfully!
+# Your Kubernetes control-plane has initialized successfully!
 ## To start using your cluster, you need to run the following as a regular user on master node:
   mkdir -p $HOME/.kube
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -35,7 +35,8 @@ You should now deploy a pod network to the cluster.
 Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
   https://kubernetes.io/docs/concepts/cluster-administration/addons/
 ## Then you can join any number of worker nodes by running the following on each as root:
-kubeadm join 10.0.0.4:6443 --token l6r787.27rpwz58au2gsmdn
+kubeadm join 172.31.36.196:6443 --token x0p92n.hkwq7i7kxy9dqmeb         --discovery-token-ca-cert-hash sha256:a14ab76240ffa0200efd389251b319dcf923fc4fff2221580e8b454b76e685c7 --cri-socket "unix:///var/run/cri-dockerd.sock"
+
 
 # Configuring CNI for network on master node
 kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
@@ -91,6 +92,7 @@ az aks create --resource-group kompose --name kompose --node-count 1 --generate-
 # Installing kubectl in local system and configuring with aks master 
 az aks install-cli
 az aks get-credentials --resource-group akscentralindia --name MyAKSCluster
+az aks get-credentials --resource-group kompose --name kompose
 
 # Deleting AKS cluster
 az aks delete --resource-group kompose --name kompose --no-wait --yes

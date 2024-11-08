@@ -10,7 +10,7 @@
 ```sh
 docker login <Azure container registry url>
     USERNAME:
-    PASSWORD:
+    PASSWORD: 
 docker image tag nginx:latest <azure container registry url>/nginx:1
 docker image ls
 docker image push <azure container registry url>/nginx:1

@@ -86,6 +86,8 @@ Running Notes
   * deployments
   * Daemonsets
   * Statefulsets
+# Pod
+* It is also like the name space that isolate the containers
 ## Daemonset
 * Kubelet is nothing but Daemonset
 * Kubeproxy is nothing but Daemonset
@@ -100,7 +102,7 @@ Running Notes
 ## Connecting to k8s cluster
   1. kubectl 
   2. client libraries(python, java)
-* By using REST-API above two will connect with k8s
+* By using REST-API above two will connect with k8s server
 ## kubectl [command] [TYPE] [NAME] [flags]
 ###  Commands
 * [refer_here](https://kubernetes.io/docs/reference/kubectl/)
@@ -126,7 +128,11 @@ Running Notes
      1. Understandable by machines
   3. Configaration files
      1. Understandable by both Humans and Machines
-* Write the manifest based on server api version to know it `kubectl version`
+* Write the manifest based on server api version.
+* To know the server version apply command 
+```sh
+kubectl version
+```
 ## Commands for kubectl
 ```sh 
 kubectl get pods <pod-name> -o yaml
@@ -143,4 +149,89 @@ kubectl get pods --show-labels
   * Don't start application container untill db pod is created
   * For the checking purpose we use init containers
   * Init containers goes to exited stated when db pod got start
+  * After init containers goes to exited state, main container (application container) starts working.
+# 20/10/2024 K8s Morning
 * 
+## requests and limits
+* requests - lower limit
+* limits - upper limit
+* we can put requests and limits to cpu, memory, disks(storage)
+* putting upper limits (limits) are mandatory
+* we can describe these at container level spec
+## Replicaset
+* Replica set can create pods based on labels
+    * If already 5 pods are there with env: "dev" and we specify 5 replicas in spec with labels env: "dev", replicaset can not create pod
+    * replicaset consider labels it can not mind who create pods
+    * It considers only labels and maintain no of pods of that number
+* Thats why it comes under controller section
+* It always moniters required pods are there or not
+```sh
+matchLabels:
+  app: dev
+  env: dev
+# in this "app and env"  not "app or env", both should present
+```
+## service
+* Inside K8s we have DNS server this is called CORE DNS.
+* This gives unique names to ip addresses
+```sh
+selector:
+  app: dev
+  env: dev
+# in this "app or env" any one is enough
+```
+### clusterip (kubeadm and managed k8s)
+### Nodeport (kubeadm)
+* we have to range of nodeport range 30000-32767
+### Load Balancer(managed k8s)
+* This is available for cloud based cluster aws or azure
+# 20/11/2024 K8s Evening
+* 
+## Managed K8s cluster
+### Node Pools
+* These are nothing but collection of different os vm machines
+  1. Node Pool1 - all linux VM's are in this pool
+  2. Node Pool2 - all windows VM's are in this pool
+* what are node pools in azure?
+* what is meant by cloud controller manager?
+* CNI of aks is managed by azure CNI
+    ### Advantages
+        * Through this azure CNI different azure services can be connected
+        * K8s cluster, Data bases, roles etc,. are all in the same network and are able to communicate with each other
+* cat /var/logs/cloud-init
+### In 3 tier architecture 
+1. Frontend
+   1. APP
+   2. Web (browsers)
+2. Backend
+3. Data Base
+#### Frontend
+* APP will directly speak with api to communicate with backend
+* Web will speak with store frontend and store frontend will speak with api to communicate with backend
+![alt text](images/docker2.png)
+# 22/10/2024 K8s 
+## Deployments
+* it gives zero downtime approach
+* atleast one pod is running
+* It is for stateless applications
+# 24/10/2024
+## Daemonset
+* In Daemonset spec there is no any `replicas` section
+# 26/10/2024 K8s 
+# Lens
+* UI viewing of aks cluster
+# Ingress
+* rewright in ingress
+* annotations are used to communicate with third party services
+* default backend
+* vertical pod auto scalling is usefull for recommendations suggetions
+    * defaultly put it to `off`
+* In Production environment we should have network policies
+* In other environments that is not that much importance
+# 02/11/2024 K8s
+* Pod preset [refer_here](https://kubernetes-docsy-staging.netlify.app/docs/concepts/workloads/pods/podpreset/) this is not that much importance
+* in the world of helm we have charts
+# Helm
+* Manifest-> template -> valu
+* makesure to know about loops and if-conditions in helm cheat sheet
+*` github kustomize example` search it in google
