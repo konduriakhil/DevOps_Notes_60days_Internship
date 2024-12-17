@@ -235,3 +235,95 @@ selector:
 * Manifest-> template -> valu
 * makesure to know about loops and if-conditions in helm cheat sheet
 *` github kustomize example` search it in google
+# 09/11/24 k8s 
+* If system fails in production the solution is rollbacks for devops engineers
+* Google four golden signels(These are used for troubleshooting the problems for any thing in DevOps)
+    1. Latency
+    2. Traffic
+    3. Error
+    4. Saturation
+### Site Reliability Engineer
+* SLI
+* SLA
+* SLO
+## Observebility
+* Logs  
+* Traces 
+* Metrics
+## 
+* Loki collects logs 
+* Prometheus collects metrics 
+* Graffana is used to see logs and metrics from Loki and Prometheus
+## Terminology regarding Observebility (interview)
+* Service Mesh
+* Sidecar for collecting logs 
+* How to collect application metrics, logs, traces?
+* Opentelemetry 
+* log collection using sidecars are important
+* exporters
+* kubectl->helm->argoCD(Transformation)
+# 30/11/2024
+* Codelint and codeql
+* SCA and SAST
+* Dast
+* Attack surface and attack vector, os hardening
+* Injection Attacks
+* Interview questions for k8s
+* which problems do you face recently?
+    * what is the problem?
+    * how you troubleshoot it?
+    * what are preventions for potential threats?
+# 1/12/2024
+* SCA(Software composition analysis)
+    * Dependencies
+* SAST(Static application security testing)
+    * testing Code developed or written
+* DAST(Dynamic application security testing)
+    * testing at application running time 
+* what is CVE in security issues?
+* OWASP
+* OWASP web top 10 attack list?
+* restapi
+* what are popular sast tools?
+* contaninerized
+* free tools
+    * snyk
+* App Registration and client id, service principle 
+# 3/12/2024
+## DevOps
+* In azuredevops pipeline we don't need to define to clone the repository 
+    * by default it clones the repo
+## Cloud
+
+# 4/12/2024
+## DevOps
+  ### Self Hosted Agnet
+    * In self hosted agents installing necessary softwares using the pipeline scripts is not good practice
+      * If you are working with pipeline we are assuming that all necessary softwares are present in agent
+  ### Microsoft hosted agents
+    * Microsoft hosted agent all necessary softwares are managed by microsoft and we don't need to worry about that.
+### Integrate these into your github actions (CICD)
+  * code quality checks 
+  * lint checks
+* git branching strategies are important and explained in the class, see it once
+## Multi cloud
+  ### AWS
+   * NACL policy type is allow list and deny list
+       * if a thing has both allow and deny, according to priority number it works
+   * Security Group has only allow list
+       * any thing other than allow is by default deny
+     * `*` means lowset priorirty
+  ### Azure 
+    * here we have only `Network security group ` which has both allow and deny rules and can be applied at both network interface level and subnet level.
+    * It has both allow and deny rules
+    * lower the number and higher the prioroty
+# 07/12/2024
+* If the same template is using 4 projects (azure devops)
+    * The advantage is if any issue is there, it can be fixed at template and all the 4 projects were set.
+* In template section type git means azure devops source repository
+# 7/12/2024
+* In azure devops templates section variables are used for sensitive information.
+* If there is any user defined values then  parameters are used
+* All the DevOps engineers handles the release branch
+# 8/11/2024
+* 

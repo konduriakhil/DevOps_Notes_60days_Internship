@@ -203,3 +203,77 @@ sudo dpkg -i trivy_0.34.0_Linux-64bit.deb
 # Scanning the docker image
 trivy image spc:1
 ```
+# Chess-game-tutorial
+Git repository 
+* Clone the git repository
+```sh
+git clone https://github.com/konduriakhil/chess-game-tutorial.git
+```
+## Docker
+### Docker Installation
+```sh
+# Docker Installation
+curl -fsSL https://get.docker.com -o install-docker.sh
+sh install-docker.sh
+docker info
+# Adding user to docker group
+sudo usermod -aG docker ubuntu
+exit
+docker info
+# Deleting the all containers
+docker rm -f $(docker container ls -a -q)
+# Deleting the all images
+docker rmi $(docker image ls -q)
+# Creating docker image
+docker image build -t chess:1.0 .
+# Creating containers
+docker container run -d -P --name chess chess:1.0
+```
+
+#### Dockerfile
+```Dockerfile
+# Stage 1: Build the React app
+FROM node:lts-alpine as build
+
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the app for production
+RUN npm run build
+
+# Stage 2: Serve the app with Nginx
+FROM nginx:alpine
+
+# Copy the build files from the previous stage
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy custom nginx configuration file (optional)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
+```
+##### nginx.conf
+```sh
+server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html index.htm;
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
